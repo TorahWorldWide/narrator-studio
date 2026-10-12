@@ -12,8 +12,9 @@ import { deess } from './modules/deess';
 import { sat } from './modules/sat';
 import { delay } from './modules/delay';
 import { reverb } from './modules/reverb';
+import { pitch } from './modules/pitch';
 
 /** Ordered list for the "+" sheet. */
-export const MODULES: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, reverb, delay];
+export const MODULES: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, pitch, reverb, delay];
 export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(MODULES.map((m) => [m.id, m]));
 export const moduleDef = (id: string): ModuleDef | undefined => REGISTRY[id];
