@@ -1,5 +1,6 @@
 import { REGISTRY } from '../dsp/registry';
 import type { ChainItem } from '../dsp/types';
+import { HUM_WARNING } from '../dsp/modules/hum';
 import { isRegion } from '../dsp/modules/nr';
 import { moveModule, removeModule, resetModule, setNrPrint, setParam, toggleModule, useStore } from '../state/store';
 import { fmtTime } from './format';
@@ -61,6 +62,7 @@ export default function ModuleCard({ item, index, count }: { item: ChainItem; in
       </header>
       {GR_MODULES.has(item.id) && <GrBar index={index} />}
       {item.id === 'nr' && <NrControls item={item} index={index} />}
+      {item.id === 'hum' && <p className="card-note">{HUM_WARNING}</p>}
       <div className="knobs">
         {def.params.map((pd) => (
           <Knob key={pd.key} def={pd} value={typeof item.p[pd.key] === 'number' ? item.p[pd.key] : pd.def}

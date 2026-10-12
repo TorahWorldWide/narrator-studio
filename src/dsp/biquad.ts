@@ -23,6 +23,12 @@ export function peaking(sr: number, f: number, q: number, db: number): Coefs {
   const A = Math.pow(10, db / 40);
   return norm(1 + alpha * A, -2 * cos, 1 - alpha * A, 1 + alpha / A, -2 * cos, 1 - alpha / A);
 }
+/** RBJ notch with finite depth: poles keep the bandwidth set by q, centre gain = −depthDb. */
+export function notch(sr: number, f: number, q: number, depthDb: number): Coefs {
+  const { cos, alpha } = w(sr, f, q);
+  const g = Math.pow(10, -depthDb / 20);
+  return norm(1 + alpha * g, -2 * cos, 1 - alpha * g, 1 + alpha, -2 * cos, 1 - alpha);
+}
 export function lowshelf(sr: number, f: number, q: number, db: number): Coefs {
   const { cos, alpha } = w(sr, f, q);
   const A = Math.pow(10, db / 40), sq = 2 * Math.sqrt(A) * alpha;
