@@ -53,3 +53,12 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 ## 1.7 presets — done
 - src/ui/Presets.tsx under the rack; 4 starters saved on first run (store STARTER_PRESETS). nr preset loads hp only + toast until Phase 2.
 - Smoke now also checks presets (gate preset → 2 cards; nr preset → toast).
+
+## 1.8 deploy phase 1 — done (~10:30 UTC)
+- npm test 26/26, build clean, commit `deploy: phase 1` (649b2ca; docs/ was already in the presets commit, so it is an empty marker), pushed.
+- Live bundle index-DXuh0A49.js matches docs/index.html; worklet asset 200.
+- Live smoke: pass=true (load 0.9 s, canvas 20/20, time advanced, meters moving, comp card, recipe JSON ok, presets ok, errs [], bad []).
+- Extra: all 3 sources load on live (orig/b43/live Genesis 1 = 6:04.0); b43 disabled on I Chronicles.
+- Phone sanity: /tmp/narrator_studio.png at 390 px: no overflow, transport reachable, RTL, 44 px targets.
+- Phase-1 message + link sent to Tomer.
+- Next: Phase 2, task 2.1 (fft + nr).
