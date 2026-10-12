@@ -15,6 +15,7 @@ class Engine {
   pre: GainNode | null = null;
   post: GainNode | null = null;
   private cache = new Map<string, Entry>();
+  private pending = new Map<string, Promise<Float32Array>>();
   private url = '';
   private src: AudioBufferSourceNode | null = null;
   private playing = false;
@@ -59,9 +60,17 @@ class Engine {
   }
 
   /** Downloads + decodes (resampled to 48 kHz mono). Cached by url, at most 6 buffers. */
-  async load(url: string, onProgress?: (frac: number) => void): Promise<Float32Array> {
+  load(url: string, onProgress?: (frac: number) => void): Promise<Float32Array> {
     const hit = this.cache.get(url);
-    if (hit) { this.cache.delete(url); this.cache.set(url, hit); onProgress?.(1); return hit.data; }
+    if (hit) { this.cache.delete(url); this.cache.set(url, hit); onProgress?.(1); return Promise.resolve(hit.data); }
+    const inflight = this.pending.get(url);
+    if (inflight) return inflight;
+    const p = this.fetchDecode(url, onProgress).finally(() => this.pending.delete(url));
+    this.pending.set(url, p);
+    return p;
+  }
+
+  private async fetchDecode(url: string, onProgress?: (frac: number) => void): Promise<Float32Array> {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const total = Number(res.headers.get('content-length')) || 0;
