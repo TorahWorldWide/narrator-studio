@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { engine } from './audio/engine';
 import { audioUrl } from './sources';
-import { setState, useStore } from './state/store';
+import { setState, syncPrints, useStore } from './state/store';
 import AddModuleSheet from './ui/AddModuleSheet';
 import BookChapterPicker from './ui/BookChapterPicker';
 import ExportPanel from './ui/ExportPanel';
@@ -28,6 +28,7 @@ export default function App() {
         if (!live) return;
         engine.switchBuffer(url);
         setState({ progress: null, loadedUrl: url });
+        syncPrints();
       })
       .catch((e) => { if (live) setState({ progress: null, error: `לא הצלחתי לטעון את הקובץ (${String(e?.message ?? e)})` }); });
     return () => { live = false; };

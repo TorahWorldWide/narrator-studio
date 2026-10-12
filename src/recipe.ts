@@ -1,3 +1,4 @@
+import { isRegion } from './dsp/modules/nr';
 import { REGISTRY } from './dsp/registry';
 import type { ChainItem } from './dsp/types';
 import { SOURCES, bookByEnglish, type SourceId } from './sources';
@@ -36,6 +37,8 @@ export function validate(obj: unknown): { ok: boolean; errors: string[] } {
     if (typeof it.on !== 'boolean') errors.push(`chain[${i}]: "on" must be boolean`);
     if (it.p !== undefined && (typeof it.p !== 'object' || it.p === null || Array.isArray(it.p)))
       errors.push(`chain[${i}]: "p" must be an object`);
+    else if (it.id === 'nr' && it.p?.print !== undefined && it.p.print !== 'auto' && !isRegion(it.p.print))
+      errors.push(`chain[${i}]: nr "print" must be "auto" or [t0, t1] seconds`);
   });
   return { ok: errors.length === 0, errors };
 }

@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { engine } from '../audio/engine';
+import { isRegion, printKey, printStats, type PrintMode } from '../dsp/modules/nr';
 import { REGISTRY } from '../dsp/registry';
 import type { ChainItem } from '../dsp/types';
 import { BOOKS, hasSource, type SourceId } from '../sources';
@@ -93,7 +94,31 @@ export function useStore<T>(sel: (s: State) => T): T {
 let toastId = 0;
 export function toast(msg: string) { setState({ toast: { msg, id: ++toastId } }); }
 
-function setChain(chain: ChainItem[]) { setState({ chain }); engine.setChain(chain); }
+function setChain(chain: ChainItem[]) { setState({ chain }); engine.setChain(chain, []); syncPrints(); }
+
+// ---- noise prints for nr modules (the worklet has no source, so the main thread computes them) ----
+const printCache = new Map<string, Float32Array>();
+/** Sends each nr module the print statistics of the loaded source (cached per url + print region). */
+export function syncPrints() {
+  const url = state.loadedUrl, data = url ? engine.data(url) : null;
+  if (!data) return;
+  state.chain.forEach((it, i) => {
+    if (it.id !== 'nr') return;
+    const mode: PrintMode = isRegion(it.p.print) ? it.p.print : 'auto';
+    const key = `${url}|${printKey(mode)}`;
+    let st = printCache.get(key);
+    if (!st) {
+      st = printStats(data, mode);
+      printCache.set(key, st);
+      if (printCache.size > 12) printCache.delete(printCache.keys().next().value as string);
+    }
+    engine.setPrint(i, st);
+  });
+}
+export function setNrPrint(i: number, print: PrintMode) {
+  setParam(i, 'print', print);
+  syncPrints();
+}
 
 export function addModule(id: string) {
   const def = REGISTRY[id];
@@ -116,7 +141,7 @@ export function resetModule(i: number) {
   if (!def) return;
   setChain(state.chain.map((it, k) => (k === i ? { ...it, p: def.defaults() } : it)));
 }
-export function setParam(i: number, key: string, value: number) {
+export function setParam(i: number, key: string, value: unknown) {
   const it = state.chain[i];
   if (!it) return;
   const p = { ...it.p, [key]: value };
