@@ -14,7 +14,10 @@ import { delay } from './modules/delay';
 import { reverb } from './modules/reverb';
 import { pitch } from './modules/pitch';
 
-/** Ordered list for the "+" sheet. */
-export const MODULES: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, pitch, reverb, delay];
-export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(MODULES.map((m) => [m.id, m]));
+import { GROUPS } from './groups';
+
+const ALL: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, pitch, reverb, delay];
+export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(ALL.map((m) => [m.id, m]));
+/** Ordered list for the "+" sheet: group order, then the order inside each group. */
+export const MODULES: ModuleDef[] = GROUPS.flatMap((g) => g.modules.map((id) => REGISTRY[id]).filter(Boolean));
 export const moduleDef = (id: string): ModuleDef | undefined => REGISTRY[id];

@@ -157,6 +157,19 @@ button, select, textarea { font: inherit; color: inherit; }
 }
 .sheet-h { display: flex; align-items: center; justify-content: space-between; }
 .sheet-h h2 { font-size: 17px; margin: 8px 0; }
+.search {
+  width: 100%; min-height: 44px; margin: 4px 0 8px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit;
+}
+.group-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.gchip {
+  flex: 0 0 auto; min-height: 40px; padding: 0 12px; border-radius: 20px; border: 1px solid var(--line);
+  background: var(--bg); cursor: pointer; font-size: 14px; white-space: nowrap;
+}
+.gchip.on { border-color: var(--accent); color: var(--accent); }
+.add-group { margin-top: 10px; }
+.add-group-h { font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 2px 6px; }
+.card-group { margin-inline-end: 6px; }
 .add-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .add-item {
   width: 100%; min-height: 56px; text-align: start; display: flex; flex-direction: column; gap: 2px;

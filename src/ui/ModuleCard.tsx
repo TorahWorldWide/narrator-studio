@@ -1,3 +1,4 @@
+import { groupOf } from '../dsp/groups';
 import { REGISTRY } from '../dsp/registry';
 import type { ChainItem } from '../dsp/types';
 import { HUM_WARNING } from '../dsp/modules/hum';
@@ -51,7 +52,7 @@ export default function ModuleCard({ item, index, count }: { item: ChainItem; in
         <button type="button" className={`power${item.on ? ' on' : ''}`} aria-pressed={item.on}
           aria-label={item.on ? 'כבה' : 'הפעל'} onClick={() => toggleModule(index)}>⏻</button>
         <div className="card-name">
-          {def.he} <span className="muted">· {def.en}</span>
+          <span className="card-group" title={groupOf(item.id)?.he} aria-hidden="true">{groupOf(item.id)?.icon}</span>{def.he} <span className="muted">· {def.en}</span>
           {def.experimental && <span className="tag">ניסיוני</span>}
         </div>
         <div className="card-tools">
