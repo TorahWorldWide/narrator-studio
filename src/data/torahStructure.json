@@ -1,0 +1,108 @@
+{
+  "sections": [
+    {
+      "name": "תורה",
+      "english": "Torah",
+      "books": [
+        { "english": "Genesis", "hebrew": "בראשית", "chapters": 50 },
+        { "english": "Exodus", "hebrew": "שמות", "chapters": 40 },
+        { "english": "Leviticus", "hebrew": "ויקרא", "chapters": 27 },
+        { "english": "Numbers", "hebrew": "במדבר", "chapters": 36 },
+        { "english": "Deuteronomy", "hebrew": "דברים", "chapters": 34 }
+      ]
+    },
+    {
+      "name": "נביאים ראשונים",
+      "english": "Early Prophets",
+      "books": [
+        { "english": "Joshua", "hebrew": "יהושע", "chapters": 24 },
+        { "english": "Judges", "hebrew": "שופטים", "chapters": 21 },
+        { "english": "I Samuel", "hebrew": "שמואל א", "chapters": 31 },
+        { "english": "II Samuel", "hebrew": "שמואל ב", "chapters": 24 },
+        { "english": "I Kings", "hebrew": "מלכים א", "chapters": 22 },
+        { "english": "II Kings", "hebrew": "מלכים ב", "chapters": 25 }
+      ]
+    },
+    {
+      "name": "נביאים אחרונים",
+      "english": "Later Prophets",
+      "books": [
+        { "english": "Isaiah", "hebrew": "ישעיהו", "chapters": 66 },
+        { "english": "Jeremiah", "hebrew": "ירמיהו", "chapters": 52 },
+        { "english": "Ezekiel", "hebrew": "יחזקאל", "chapters": 48 },
+        { "english": "Hosea", "hebrew": "הושע", "chapters": 14 },
+        { "english": "Joel", "hebrew": "יואל", "chapters": 4 },
+        { "english": "Amos", "hebrew": "עמוס", "chapters": 9 },
+        { "english": "Obadiah", "hebrew": "עובדיה", "chapters": 1 },
+        { "english": "Jonah", "hebrew": "יונה", "chapters": 4 },
+        { "english": "Micah", "hebrew": "מיכה", "chapters": 7 },
+        { "english": "Nahum", "hebrew": "נחום", "chapters": 3 },
+        { "english": "Habakkuk", "hebrew": "חבקוק", "chapters": 3 },
+        { "english": "Zephaniah", "hebrew": "צפניה", "chapters": 3 },
+        { "english": "Haggai", "hebrew": "חגי", "chapters": 2 },
+        { "english": "Zechariah", "hebrew": "זכריה", "chapters": 14 },
+        { "english": "Malachi", "hebrew": "מלאכי", "chapters": 3 }
+      ]
+    },
+    {
+      "name": "כתובים",
+      "english": "Writings",
+      "books": [
+        { "english": "Psalms", "hebrew": "תהלים", "chapters": 150 },
+        { "english": "Proverbs", "hebrew": "משלי", "chapters": 31 },
+        { "english": "Job", "hebrew": "איוב", "chapters": 42 },
+        { "english": "Song of Songs", "hebrew": "שיר השירים", "chapters": 8 },
+        { "english": "Ruth", "hebrew": "רות", "chapters": 4 },
+        { "english": "Lamentations", "hebrew": "איכה", "chapters": 5 },
+        { "english": "Ecclesiastes", "hebrew": "קהלת", "chapters": 12 },
+        { "english": "Esther", "hebrew": "אסתר", "chapters": 10 },
+        { "english": "Daniel", "hebrew": "דניאל", "chapters": 12 },
+        { "english": "Ezra", "hebrew": "עזרא", "chapters": 10 },
+        { "english": "Nehemiah", "hebrew": "נחמיה", "chapters": 13 },
+        { "english": "I Chronicles", "hebrew": "דברי הימים א", "chapters": 29 },
+        { "english": "II Chronicles", "hebrew": "דברי הימים ב", "chapters": 36 }
+      ]
+    }
+  ],
+  "books": [
+    { "english": "Genesis", "hebrew": "בראשית", "chapters": 50 },
+    { "english": "Exodus", "hebrew": "שמות", "chapters": 40 },
+    { "english": "Leviticus", "hebrew": "ויקרא", "chapters": 27 },
+    { "english": "Numbers", "hebrew": "במדבר", "chapters": 36 },
+    { "english": "Deuteronomy", "hebrew": "דברים", "chapters": 34 },
+    { "english": "Joshua", "hebrew": "יהושע", "chapters": 24 },
+    { "english": "Judges", "hebrew": "שופטים", "chapters": 21 },
+    { "english": "I Samuel", "hebrew": "שמואל א", "chapters": 31 },
+    { "english": "II Samuel", "hebrew": "שמואל ב", "chapters": 24 },
+    { "english": "I Kings", "hebrew": "מלכים א", "chapters": 22 },
+    { "english": "II Kings", "hebrew": "מלכים ב", "chapters": 25 },
+    { "english": "Isaiah", "hebrew": "ישעיהו", "chapters": 66 },
+    { "english": "Jeremiah", "hebrew": "ירמיהו", "chapters": 52 },
+    { "english": "Ezekiel", "hebrew": "יחזקאל", "chapters": 48 },
+    { "english": "Hosea", "hebrew": "הושע", "chapters": 14 },
+    { "english": "Joel", "hebrew": "יואל", "chapters": 4 },
+    { "english": "Amos", "hebrew": "עמוס", "chapters": 9 },
+    { "english": "Obadiah", "hebrew": "עובדיה", "chapters": 1 },
+    { "english": "Jonah", "hebrew": "יונה", "chapters": 4 },
+    { "english": "Micah", "hebrew": "מיכה", "chapters": 7 },
+    { "english": "Nahum", "hebrew": "נחום", "chapters": 3 },
+    { "english": "Habakkuk", "hebrew": "חבקוק", "chapters": 3 },
+    { "english": "Zephaniah", "hebrew": "צפניה", "chapters": 3 },
+    { "english": "Haggai", "hebrew": "חגי", "chapters": 2 },
+    { "english": "Zechariah", "hebrew": "זכריה", "chapters": 14 },
+    { "english": "Malachi", "hebrew": "מלאכי", "chapters": 3 },
+    { "english": "Psalms", "hebrew": "תהלים", "chapters": 150 },
+    { "english": "Proverbs", "hebrew": "משלי", "chapters": 31 },
+    { "english": "Job", "hebrew": "איוב", "chapters": 42 },
+    { "english": "Song of Songs", "hebrew": "שיר השירים", "chapters": 8 },
+    { "english": "Ruth", "hebrew": "רות", "chapters": 4 },
+    { "english": "Lamentations", "hebrew": "איכה", "chapters": 5 },
+    { "english": "Ecclesiastes", "hebrew": "קהלת", "chapters": 12 },
+    { "english": "Esther", "hebrew": "אסתר", "chapters": 10 },
+    { "english": "Daniel", "hebrew": "דניאל", "chapters": 12 },
+    { "english": "Ezra", "hebrew": "עזרא", "chapters": 10 },
+    { "english": "Nehemiah", "hebrew": "נחמיה", "chapters": 13 },
+    { "english": "I Chronicles", "hebrew": "דברי הימים א", "chapters": 29 },
+    { "english": "II Chronicles", "hebrew": "דברי הימים ב", "chapters": 36 }
+  ]
+}
