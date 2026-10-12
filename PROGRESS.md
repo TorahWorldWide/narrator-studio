@@ -62,3 +62,10 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - Phone sanity: /tmp/narrator_studio.png at 390 px: no overflow, transport reachable, RTL, 44 px targets.
 - Phase-1 message + link sent to Tomer.
 - Next: Phase 2, task 2.1 (fft + nr).
+
+## 2.1–2.7 modules — done
+- nr: causal 3-frame smoothing (current + 2 previous) so latency() stays exactly 2048 as the plan tests; specgate centres it (would need +512). Print stats = [mean|std] per bin (printStats); k applied in the module, so the k knob never recomputes the print. Main thread computes stats for the worklet (store.syncPrints, cached per url+region); renderOffline lets nr compute from ctx.source. Measured: tone −0.12 dB, 2–6 kHz noise −9.8 dB; 6-min render ≈ 5.8 s in Node.
+- hum: RBJ notch with finite depth (poles at q, zeros at q·g) — the plain peaking cut was too wide (0.48 dB at 440 Hz).
+- deess: LR4 split + CompCore (1 ms attack, hard knee). sat/delay/reverb: mix 0 exact pass-through.
+- pitch: SimpleFilter processes in 16384-frame bursts, so output is emitted with a fixed 24576-sample delay; latency() = envelope cross-correlation of an AM-noise probe (a lone impulse is faded/skipped by WSOLA), cached per pitch: 23.5k–25.2k samples.
+- Next: 2.8 analyzer.
