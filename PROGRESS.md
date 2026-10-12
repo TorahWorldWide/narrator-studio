@@ -38,3 +38,8 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 ## 1.4 recipe — done
 - src/recipe.ts: Recipe type, validate() (v, sr, source, book, chapter range, unknown id, on/p shape), toRecipe()/serialize() in contract key order. tests/recipe.test.ts green.
 - Next: 1.5 audio engine + worklet.
+
+## 1.5 audio engine — done (verified in 1.8 smoke)
+- src/audio/rackProcessor.ts (worklet, messages chain/params/bypass/print, meter every 2048) loaded via `?worker&url` → builds to docs/assets/rackProcessor-*.js (no window/self refs).
+- src/audio/engine.ts: singleton `engine`; decode via OfflineAudioContext(1,1,48000) (no gesture needed), AudioBuffer playback, pre/post GainNode taps for the Phase-2 analyzer. load() caches but does not select: call switchBuffer(url) after load.
+- Next: 1.6 UI.
