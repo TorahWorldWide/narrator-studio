@@ -77,6 +77,15 @@ button, select, textarea { font: inherit; color: inherit; }
 .wave-tools { display: flex; align-items: center; gap: 4px; margin-top: 6px; }
 .zoom-val, .loop-val { font-size: 13px; font-variant-numeric: tabular-nums; }
 
+/* analyzer */
+.analyzer { margin-bottom: 12px; }
+.analyzer-box { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); }
+.analyzer-canvas { display: block; width: 100%; }
+.legend { font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
+.sw.post { background: var(--accent); }
+.sw.pre { background: var(--muted); opacity: .6; }
+
 /* rack */
 .rack { display: flex; flex-direction: column; gap: 10px; }
 .empty { margin: 8px 0; }

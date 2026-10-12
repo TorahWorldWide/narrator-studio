@@ -3,6 +3,7 @@ import { engine } from './audio/engine';
 import { audioUrl } from './sources';
 import { setState, syncPrints, useStore } from './state/store';
 import AddModuleSheet from './ui/AddModuleSheet';
+import Analyzer from './ui/Analyzer';
 import BookChapterPicker from './ui/BookChapterPicker';
 import ExportPanel from './ui/ExportPanel';
 import Rack from './ui/Rack';
@@ -18,6 +19,7 @@ export default function App() {
   const chapter = useStore((s) => s.chapter);
   const sheet = useStore((s) => s.sheet);
   const error = useStore((s) => s.error);
+  const analyzer = useStore((s) => s.analyzer);
 
   useEffect(() => {
     const url = audioUrl(source, book, chapter);
@@ -44,6 +46,7 @@ export default function App() {
         </div>
         {error && <p className="error" role="alert">{error}</p>}
         <Waveform />
+        {analyzer && <Analyzer />}
         <Rack />
       </main>
       <Transport />

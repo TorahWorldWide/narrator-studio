@@ -30,6 +30,7 @@ class Engine {
   private meterCbs = new Set<(m: Meter) => void>();
   private raf = 0;
   private initP: Promise<void> | null = null;
+  private an: { pre: AnalyserNode; post: AnalyserNode } | null = null;
 
   get duration() { return this.cache.get(this.url)?.buf.duration ?? 0; }
   get isPlaying() { return this.playing; }
@@ -166,6 +167,20 @@ class Engine {
     this.url = url;
     const t = Math.min(pos, this.duration);
     if (this.playing) this.startSource(t); else { this.offset = t; this.emitTime(); }
+  }
+
+  /** Display-only analysers on the source (pre) and the rack output (post); null before init(). */
+  analysers() {
+    if (!this.an && this.ctx && this.pre && this.post) {
+      const mk = (from: AudioNode) => {
+        const a = this.ctx!.createAnalyser();
+        a.fftSize = 4096; a.smoothingTimeConstant = 0.6; a.minDecibels = -100; a.maxDecibels = 0;
+        from.connect(a);
+        return a;
+      };
+      this.an = { pre: mk(this.pre), post: mk(this.post) };
+    }
+    return this.an;
   }
 
   onTime(cb: (t: number, playing: boolean) => void) { this.timeCbs.add(cb); return () => { this.timeCbs.delete(cb); }; }

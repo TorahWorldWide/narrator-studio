@@ -20,6 +20,7 @@ export interface State {
   error: string | null;
   loadedUrl: string;
   sheet: Sheet;
+  analyzer: boolean;
   toast: { msg: string; id: number } | null;
 }
 
@@ -28,7 +29,7 @@ const PERSIST = ['chain', 'source', 'book', 'chapter', 'presets'] as const;
 
 const DEFAULTS: State = {
   source: 'live', book: 'Genesis', chapter: 1, chain: [], presets: [], note: '', bypass: false,
-  loop: null, zoom: 1, progress: null, error: null, loadedUrl: '', sheet: null, toast: null,
+  loop: null, zoom: 1, progress: null, error: null, loadedUrl: '', sheet: null, analyzer: false, toast: null,
 };
 
 function readPersisted(): Partial<State> & { _fresh?: boolean } {
