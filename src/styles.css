@@ -115,6 +115,11 @@ button, select, textarea { font: inherit; color: inherit; }
 }
 .knob-unit { color: var(--muted); font-size: 11px; }
 .knob-label { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.2; }
+.geq { display: flex; flex-direction: column; gap: 2px; margin: 6px 4px 0; }
+.geq-row { display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.geq-f { width: 36px; font-size: 12px; color: var(--muted); text-align: center; direction: ltr; }
+.geq-row input[type=range] { flex: 1; accent-color: var(--accent); height: 32px; direction: ltr; touch-action: pan-y; }
+.geq-v { width: 44px; font-size: 12px; text-align: end; direction: ltr; font-variant-numeric: tabular-nums; }
 .gr { display: flex; align-items: center; gap: 8px; margin: 4px 4px 0; font-size: 12px; }
 .gr-label { color: var(--muted); }
 .gr-track { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }

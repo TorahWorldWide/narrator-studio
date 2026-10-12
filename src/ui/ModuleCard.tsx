@@ -3,14 +3,44 @@ import { REGISTRY } from '../dsp/registry';
 import type { ChainItem } from '../dsp/types';
 import { HUM_WARNING } from '../dsp/modules/hum';
 import { isRegion } from '../dsp/modules/nr';
+import { GEQ_BANDS, geqKey } from '../dsp/modules/geq';
+import { LOFI_TYPES } from '../dsp/modules/lofi';
+import { PHASER_TYPES } from '../dsp/modules/phaser';
 import { PITCH_WARNING } from '../dsp/modules/pitch';
+import { ROOMS } from '../dsp/modules/room';
 import { moveModule, removeModule, resetModule, setNrPrint, setParam, toggleModule, useStore } from '../state/store';
 import { fmtTime } from './format';
 import Knob from './Knob';
 import { useMeter } from './useMeter';
 
 const EQ_TYPES = ['פעמון', 'מדף נמוך', 'מדף גבוה'];
-const GR_MODULES = new Set(['comp', 'gate', 'expander', 'mbcomp', 'dyneq']);
+/** Names for the discrete "type" knobs: `${module}.${param}` (eq: any b*type). */
+const TYPE_NAMES: Record<string, string[]> = {
+  'phaser.type': PHASER_TYPES, 'lofi.type': LOFI_TYPES, 'room.room': ROOMS.map((r) => r.he),
+};
+const typeNames = (id: string, key: string) => (id === 'eq' && key.endsWith('type') ? EQ_TYPES : TYPE_NAMES[`${id}.${key}`]);
+const GR_MODULES = new Set(['comp', 'gate', 'expander', 'mbcomp', 'dyneq', 'deess', 'deplosive']);
+
+/** Graphic EQ: one horizontal slider per band (touch-friendly rows). */
+function GeqSliders({ item, index }: { item: ChainItem; index: number }) {
+  return (
+    <div className="geq">
+      {GEQ_BANDS.map((f) => {
+        const k = geqKey(f), v = typeof item.p[k] === 'number' ? item.p[k] : 0;
+        const label = f >= 1000 ? `${f / 1000}k` : String(f);
+        return (
+          <label key={k} className="geq-row">
+            <span className="geq-f">{label}</span>
+            <input type="range" min={-12} max={12} step={0.5} value={v} aria-label={`${label} הרץ`}
+              onChange={(e) => setParam(index, k, Number(e.target.value))}
+              onDoubleClick={() => setParam(index, k, 0)} />
+            <span className="geq-v">{v > 0 ? '+' : ''}{v.toFixed(1)}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
 
 function GrBar({ index }: { index: number }) {
   const gr = useMeter().gr[index] ?? 0;
@@ -77,13 +107,18 @@ export default function ModuleCard({ item, index, count }: { item: ChainItem; in
       {item.id === 'pitch' && <p className="card-note">{PITCH_WARNING}</p>}
       {item.id === 'loudness' && <LoudnessInfo item={item} index={index} />}
       {item.id === 'debreath' && <p className="card-note">תקשיב שלא נבלעים ה׳ ו-ח׳ — אם כן, הגדל את "אורך מינימום"</p>}
-      <div className="knobs">
-        {def.params.map((pd) => (
-          <Knob key={pd.key} def={pd} value={typeof item.p[pd.key] === 'number' ? item.p[pd.key] : pd.def}
-            onChange={(v) => setParam(index, pd.key, v)}
-            format={item.id === 'eq' && pd.key.endsWith('type') ? (v) => EQ_TYPES[Math.round(v)] ?? String(v) : undefined} />
-        ))}
-      </div>
+      {item.id === 'geq' ? <GeqSliders item={item} index={index} /> : (
+        <div className="knobs">
+          {def.params.map((pd) => {
+            const names = typeNames(item.id, pd.key);
+            return (
+              <Knob key={pd.key} def={pd} value={typeof item.p[pd.key] === 'number' ? item.p[pd.key] : pd.def}
+                onChange={(v) => setParam(index, pd.key, v)}
+                format={names ? (v) => names[Math.round(v)] ?? String(v) : undefined} />
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
