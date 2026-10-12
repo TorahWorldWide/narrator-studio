@@ -6,10 +6,12 @@ const DEF: CompP = { thresh: -18, ratio: 2, attack: 10, release: 120, knee: 6, m
 
 /**
  * Feed-forward compressor gain computer: peak detector in the dB domain, soft knee,
- * branching attack/release one-poles on the gain reduction. Shared with the de-esser.
+ * smooth decoupled attack/release one-poles on the gain reduction (a release-only peak hold,
+ * then attack smoothing — Giannoulis/Massberg/Reiss 2012). Shared with the de-esser.
  */
 export class CompCore {
   gr = 0;                       // current gain reduction, dB ≥ 0
+  private y1 = 0;               // peak-hold stage (release only)
   private sr: number;
   private T = DEF.thresh; private R = DEF.ratio; private W = DEF.knee;
   private aA = 0; private aR = 0;
@@ -32,10 +34,12 @@ export class CompCore {
     else if (W > 0 && 2 * Math.abs(d) <= W) yg = xg + ((1 / R - 1) * (d + W / 2) * (d + W / 2)) / (2 * W);
     else yg = T + d / R;
     const xl = xg - yg;
-    this.gr = xl > this.gr ? this.aA * this.gr + (1 - this.aA) * xl : this.aR * this.gr + (1 - this.aR) * xl;
+    const r = this.aR * this.y1 + (1 - this.aR) * xl;
+    this.y1 = xl > r ? xl : r;
+    this.gr = this.aA * this.gr + (1 - this.aA) * this.y1;
     return Math.pow(10, -this.gr / 20);
   }
-  reset() { this.gr = 0; }
+  reset() { this.gr = 0; this.y1 = 0; }
 }
 
 class CompProc implements Processor<CompP> {
