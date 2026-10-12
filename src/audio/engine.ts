@@ -53,6 +53,7 @@ class Engine {
           channelCount: 1, channelCountMode: 'explicit', channelInterpretation: 'speakers',
         });
         node.port.onmessage = (e) => { if (e.data?.type === 'meter') this.meterCbs.forEach((cb) => cb(e.data)); };
+        node.onprocessorerror = (e) => console.error('rack worklet error', e);
         this.pre = ctx.createGain(); this.post = ctx.createGain();
         this.pre.connect(node); node.connect(this.post); this.post.connect(ctx.destination);
         this.node = node;
