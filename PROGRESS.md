@@ -127,3 +127,4 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - WALL: OpenAIR certificate expired (curl verify 10) → asked Tomer: 1) computed rooms (built, default) or 2) download anyway. Voxengo rejected
   (modeled IRs + no altered redistribution). If he says 2: replace roomIR() data with OpenAIR IRs (credit CC BY), keep the engine.
 - Deployed 12:40 UTC: live bundle index-gmJzuWth.js, all assets 200; live smoke pass=true (phase4 ok: 35 items, 21 cards play, loudness card, heavy WAV 46.5 s). Link sent to Tomer. Awaiting: his ear + answer 1/2 on rooms.
+- 12.10: Tomer replied "ok" (not "2") → rooms STAY computed (option 1). Still awaiting his ear on the 35 effects; no further work without his feedback.
