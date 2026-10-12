@@ -41,6 +41,9 @@ class Engine {
   init(): Promise<void> {
     if (!this.initP) {
       this.initP = (async () => {
+        // iOS: play through the ringer/silent switch like a media app
+        const nav = navigator as Navigator & { audioSession?: { type: string } };
+        if (nav.audioSession) nav.audioSession.type = 'playback';
         const ctx = new AudioContext({ sampleRate: SR, latencyHint: 'playback' });
         this.ctx = ctx;
         await ctx.audioWorklet.addModule(workletUrl);
