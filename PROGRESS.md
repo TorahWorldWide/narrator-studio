@@ -76,3 +76,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - Deploy: `deploy: phase 2` + fix commit pushed; live bundle index-Co348Otx.js. Live smoke pass=true (8 cards incl. pitch/reverb tags, analyzer draws, plays through all modules, errs [] bad []). Loop-drag → "למד רעש מהלופ" → "אוטומטי" verified live.
 - Phase-2 message + link sent to Tomer.
 - Next: Phase 3, task 3.1 (wav.ts + renderWorker + "הורד WAV").
+
+## 3.1 render worker — done
+- src/dsp/wav.ts (toPcm16 = round(clamp(v)·32767), encodeWav), src/audio/renderWorker.ts, src/audio/render.ts (renderInWorker copies the source, download helper). ExportPanel: "הורד WAV" with % progress → <Book>_<ch>.<source>.wav + .recipe.json; "הורד מתכון" button appears after render as the fallback.
+- Local: hp+nr on Genesis 1 (6:04) renders in 6.9 s headless; WAV pcm_s16le 48k mono.
