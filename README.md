@@ -10,7 +10,7 @@
 ### איך משתמשים (בטלפון)
 - **בוחרים הקלטה:** `מקור` (ההקלטה הגולמית) · `באתר היום` (מה שהאתר מנגן עכשיו) · `ב׳` (ניסיון #43, בראשית בלבד), ואז ספר ופרק (`‹ ›` לפרק הבא/הקודם).
 - **מנגנים:** ▶ למטה. הקשה על צורת הגל קופצת לנקודה. גרירה על צורת הגל יוצרת **לופ**; את הקצוות מזיזים בידיות, ו-`× לופ` מבטל.
-- **מוסיפים אפקטים:** `+ הוסף אפקט`. כפתור (knob): גוררים למעלה/למטה, הקשה כפולה מחזירה לברירת מחדל, הקשה על המספר מאפשרת להקליד ערך. ⏻ מכבה אפקט, ↑ ↓ משנים סדר, ↺ מאפס, ✕ מוחק.
+- **מוסיפים אפקטים:** `+ הוסף אפקט`. 35 אפקטים ב-6 קבוצות: 🧹 ניקוי רעש · 👄 פה ונשימות · 🔊 עוצמה · 🎨 צבע הקול · 🏛 חלל והד · 🎭 יצירתי. לוחצים על קבוצה או מחפשים בשם. כפתור (knob): גוררים למעלה/למטה, הקשה כפולה מחזירה לברירת מחדל, הקשה על המספר מאפשרת להקליד ערך. ⏻ מכבה אפקט, ↑ ↓ משנים סדר, ↺ מאפס, ✕ מוחק.
 - **משווים:** כפתור `עם אפקטים / בלי אפקטים` למטה (זהוב = אתה שומע בלי אפקטים). `📈 אנלייזר` מציג את התדרים: כחול = אחרי, אפור = לפני.
 - **הפחתת רעש:** מסמנים לופ על קטע שקט בלבד ולוחצים `למד רעש מהלופ`, או משאירים `אוטומטי` (15% הרגעים השקטים בפרק).
 - **ייצוא:** `⤓ ייצוא` ← `העתק מתכון` ושולחים להרמס בטלגרם. `הורד WAV` מוריד את הפרק המעובד לאוזן (ואיתו קובץ המתכון).
@@ -41,9 +41,19 @@ One DSP core in TypeScript (`src/dsp/`), three hosts:
 3. `tools/render.ts`, a Node CLI (what Hermes runs).
 
 All three call the same `Rack` in 128-sample blocks. `renderOffline` compensates module latency, so output
-length and sample alignment equal the input's. Modules: gain, hp, lp, eq (4 bands), gate, comp, limiter (5 ms
-lookahead), nr (spectral subtraction, port of `~/hum/scripts/specgate.py print`), hum (RBJ notches), deess (LR4
-split + comp), sat, pitch (soundtouchjs, experimental), reverb (Freeverb, experimental), delay.
+length and sample alignment equal the input's. 35 modules in 6 groups (`src/dsp/groups.ts`):
+
+| group | modules (id) |
+|---|---|
+| 🧹 noise | nr (spectral subtraction, port of specgate `print`), ainr (RNNoise wasm, latency 960), hum (RBJ notches), gate, expander, dereverb (Lebart late-reverb suppression, latency 2048) |
+| 👄 mouth | declick (2nd-difference detector + Hermite repair, latency 512), deplosive (low-band comp), debreath (level + ZCR runs ≥ min length, latency 150 ms), deess |
+| 🔊 level | gain, comp, mbcomp (3-band LR4), limiter (5 ms lookahead), clipper, loudness (BS.1770 LUFS of its input over the whole file → one gain), rider (100 ms lookahead), transient |
+| 🎨 tone | hp, lp, eq (4 bands), geq (10 bands), dyneq, tilt, exciter, sat |
+| 🏛 space | reverb (Freeverb), room (partitioned convolution, computed room IRs, latency 1024), delay |
+| 🎭 fun | pitch (soundtouchjs), chorus, phaser (phaser/flanger), lofi (phone/old radio), tremolo, robot (ring mod + comb) |
+
+`loudness` is measured by rendering the chain before it over the whole chapter (renderOffline does this itself;
+for listening a worker does it and the card shows the result), so browser and Node apply the same gain.
 
 ### The recipe (v1)
 ```jsonc
@@ -79,6 +89,15 @@ otherwise the VM. Nothing goes to the live site (`narration/` on R2) without Tom
   more hop.
 - **pitch** latency is measured per setting (≈ 23.5k–25.2k samples) by envelope cross-correlation, so the lag
   check is skipped for chains with pitch. Not for the live site.
+
+### Third-party code and licences
+- RNNoise (Xiph.Org, BSD-3-Clause): wasm build from `@jitsi/rnnoise-wasm` 0.2.1 (Apache-2.0), vendored in
+  `vendor/rnnoise/` and embedded as base64 (`tools/embed_rnnoise.mjs` → `src/dsp/rnnoiseWasm.ts`).
+- soundtouchjs 0.3.0 (LGPL-2.1), pitch only.
+- Room impulse responses are computed in `src/dsp/modules/room.ts` (no recorded IRs). OpenAIR was the planned
+  source, but its certificate was expired on 12.10.2026, and the Voxengo pack forbids redistributing altered copies.
+- Everything else is written here from public algorithms (RBJ cookbook, Freeverb, Giannoulis et al. 2012,
+  Lebart et al. 2001, ITU-R BS.1770-4).
 
 ### Where the sources live
 `https://audio.torah-worldwide.com/` (R2 bucket `torah-audio`, CORS `*`):

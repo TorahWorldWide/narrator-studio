@@ -113,3 +113,16 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 
 ## Phase 4 — Tomer feedback 1 (12.10, ~11:20 UTC)
 - He wants at least 2× the effects (FL-plugin style, audio-editing only, no MIDI). Asked first: where they come from + a list with one line each; he approves/rejects by number. Proposal of 20 (own TS code per public algorithms; RNNoise WASM; OpenAIR IRs; nothing that changes length/timing) sent — AWAITING his numbers. Do not build before approval.
+
+## Phase 4 round 1 — 21 new effects + groups (12.10, ~11:30–12:35 UTC, solo; Tomer did not answer the fleet question)
+- Tomer approved all 20 proposed + asked for a robot voice and groups "to see at a glance". Built:
+  groups (src/dsp/groups.ts: noise/mouth/level/tone/space/fun) + "+" sheet chips (wrapping) + search + group icon on cards;
+  21 modules: declick, deplosive, debreath, ainr (RNNoise), dereverb (+ shared src/dsp/stft.ts), expander, loudness (+ src/dsp/lufs.ts,
+  rack.measureInput, worker 'measure' job, store.syncLoudness, card info), rider, mbcomp, transient, clipper, geq (slider rows),
+  dyneq, tilt, exciter, room (partitioned convolution, computed IRs), chorus, phaser (phaser/flanger), lofi (phone/radio), tremolo, robot.
+- Measured: LUFS meter vs ffmpeg within 0.05 LU (3 chapters); RNNoise on Genesis 1 original: quietest 15% frames −19.2 dB, loudest 30% −0.0 dB,
+  44× real-time, deterministic, delay 480 (+480 buffering = 960); de-click repair error ≈ 0.001; CPU share (VM, per module): room 2.8%, ainr 2.5%, nr 1.8%, rest < 1.6%.
+- Tests 65/65 (+ registry↔groups invariants). Local smoke pass (21 cards in one chain play in the worklet, errs []), heavy WAV (ainr+dereverb+room+loudness) 47 s for 6:04.
+  Parity with EXTRA chain (hp,nr,comp,limiter,ainr,dereverb,room,loudness,declick,mbcomp): browser == Node (abf889a4…).
+- WALL: OpenAIR certificate expired (curl verify 10) → asked Tomer: 1) computed rooms (built, default) or 2) download anyway. Voxengo rejected
+  (modeled IRs + no altered redistribution). If he says 2: replace roomIR() data with OpenAIR IRs (credit CC BY), keep the engine.
