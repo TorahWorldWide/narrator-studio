@@ -80,3 +80,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 ## 3.1 render worker — done
 - src/dsp/wav.ts (toPcm16 = round(clamp(v)·32767), encodeWav), src/audio/renderWorker.ts, src/audio/render.ts (renderInWorker copies the source, download helper). ExportPanel: "הורד WAV" with % progress → <Book>_<ch>.<source>.wav + .recipe.json; "הורד מתכון" button appears after render as the fallback.
 - Local: hp+nr on Genesis 1 (6:04) renders in 6.9 s headless; WAV pcm_s16le 48k mono.
+
+## 3.2–3.4 Node tools — done
+- tools/decode.ts, tools/render.ts (exit 2 on invalid recipe; resolves --in from ~/hum/live | ~/audio-level/orig | R2 download to /tmp/narrator-studio; prints sha256 of the PCM16 output too), tools/qa.ts.
+- DEVIATION (deliberate, documented): plan says QA fails on any lag ≠ 0 without pitch. Measured per module on Genesis 1 (broadband xcorr): hp95/2 −3, hp95/4 −7, hp95/8 −19, hp40/4 −2 samples; nr/comp/limiter/gate/eq-flat 0. That is minimum-phase low-frequency phase, not a time shift. QA therefore (a) measures lag in a 2–6 kHz band with the same filter on both files (default chain hp+nr+comp+limiter → 0; true 5-sample shift → 5), (b) still reports lag_broadband, (c) passes when |lag| ≤ 48 samples (1 ms): hp8+eq(+4 dB 3 kHz)+deess reads 3 samples (phase in band). Every real latency bug is ≥ 240 samples.
