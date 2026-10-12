@@ -10,7 +10,7 @@ import Knob from './Knob';
 import { useMeter } from './useMeter';
 
 const EQ_TYPES = ['פעמון', 'מדף נמוך', 'מדף גבוה'];
-const GR_MODULES = new Set(['comp', 'gate']);
+const GR_MODULES = new Set(['comp', 'gate', 'expander', 'mbcomp', 'dyneq']);
 
 function GrBar({ index }: { index: number }) {
   const gr = useMeter().gr[index] ?? 0;
