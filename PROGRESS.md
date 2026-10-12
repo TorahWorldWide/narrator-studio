@@ -69,3 +69,10 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - deess: LR4 split + CompCore (1 ms attack, hard knee). sat/delay/reverb: mix 0 exact pass-through.
 - pitch: SimpleFilter processes in 16384-frame bursts, so output is emitted with a fixed 24576-sample delay; latency() = envelope cross-correlation of an AM-noise probe (a lone impulse is faded/skipped by WSOLA), cached per pitch: 23.5k–25.2k samples.
 - Next: 2.8 analyzer.
+
+## 2.8 analyzer + 2.9 deploy phase 2 — done (~10:58 UTC)
+- Analyzer: engine.analysers() lazily taps pre/post GainNodes (fftSize 4096, smoothing 0.6); toggle 📈 in TopBar (state.analyzer, not persisted); freeze button.
+- Engine: node.onprocessorerror → console.error so the smoke test catches worklet crashes. Fix: ▶ starts at the loop start when the playhead is outside the loop.
+- Deploy: `deploy: phase 2` + fix commit pushed; live bundle index-Co348Otx.js. Live smoke pass=true (8 cards incl. pitch/reverb tags, analyzer draws, plays through all modules, errs [] bad []). Loop-drag → "למד רעש מהלופ" → "אוטומטי" verified live.
+- Phase-2 message + link sent to Tomer.
+- Next: Phase 3, task 3.1 (wav.ts + renderWorker + "הורד WAV").
