@@ -56,7 +56,7 @@ export async function renderFile(r: Recipe, inPath: string, outPath: string, mp3
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, Buffer.from(encodeWav(out, r.sr, 'pcm16')));
   if (mp3Path) await encodeMp3(outPath, mp3Path);
-  return { in: inPath, out: outPath, ...(mp3Path ? { mp3: mp3Path } : {}), len: out.length, peakIn: db(peak(src)), peakOut: db(peak(out)), latencyCompensated: true, sha256_pcm16: pcmHash(out) };
+  return { in: inPath, out: outPath, ...(mp3Path ? { mp3: mp3Path } : {}), len: out.length, peakIn: db(peak(src)), peakOut: db(peak(out)), latencyCompensated: true, sha256_pcm16: pcmHash(out), sha256_src_pcm16: pcmHash(src) };
 }
 
 async function main() {
