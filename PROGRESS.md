@@ -8,3 +8,13 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - vite.config.ts = plan's exact config + `/// <reference types="vitest/config" />` (needed so `tsc -b`
   accepts the `test` key) + nojekyll plugin. Template oxlint kept (script `lint`), template assets removed.
 - Next: 0.2 GitHub repo + Pages.
+
+## 0.2 repo + Pages — done
+- Repo https://github.com/TorahWorldWide/narrator-studio (public), Pages from main:/docs → 201.
+- Live https://torahworldwide.github.io/narrator-studio/ = 200 at ~10:05 UTC, bundle hash matches docs/index.html.
+  Link sent to Tomer.
+
+## 0.3 Playwright harness — done
+- `~/pw-test/narrator_studio_smoke.mjs [url]` (default http://127.0.0.1:4173/narrator-studio/); screenshot /tmp/narrator_studio.png.
+- Preview: `{"title":true,"dir":"rtl","errs":[],"bad":[]}`; live URL same result.
+- Next: Phase 1, task 1.1 (sources + structure).
