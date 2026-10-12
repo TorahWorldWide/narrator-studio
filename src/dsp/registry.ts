@@ -8,8 +8,9 @@ import { comp } from './modules/comp';
 import { limiter } from './modules/limiter';
 import { nr } from './modules/nr';
 import { hum } from './modules/hum';
+import { deess } from './modules/deess';
 
 /** Ordered list for the "+" sheet. */
-export const MODULES: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum];
+export const MODULES: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess];
 export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(MODULES.map((m) => [m.id, m]));
 export const moduleDef = (id: string): ModuleDef | undefined => REGISTRY[id];
