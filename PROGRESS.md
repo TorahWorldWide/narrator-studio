@@ -43,3 +43,9 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - src/audio/rackProcessor.ts (worklet, messages chain/params/bypass/print, meter every 2048) loaded via `?worker&url` → builds to docs/assets/rackProcessor-*.js (no window/self refs).
 - src/audio/engine.ts: singleton `engine`; decode via OfflineAudioContext(1,1,48000) (no gesture needed), AudioBuffer playback, pre/post GainNode taps for the Phase-2 analyzer. load() caches but does not select: call switchBuffer(url) after load.
 - Next: 1.6 UI.
+
+## 1.6 UI — done
+- Components in src/ui (TopBar, SourceChips, BookChapterPicker, Waveform, Transport, Rack, ModuleCard, Knob, AddModuleSheet, ExportPanel, Toast) + src/state/store.ts (localStorage narrator-studio:v1).
+- Choices: A/B button turns gold when effects are BYPASSED (the state you must notice). Waveform is LTR inside the RTL page; at zoom>1 a strip under it scrolls (canvas itself is touch-action:none for loops). iOS: navigator.audioSession.type=playback so the silent switch does not mute.
+- Local smoke (preview): pass=true, Genesis 1 live loads in 0.6 s.
+- Next: 1.7 presets.
