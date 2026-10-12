@@ -3,7 +3,7 @@ import { engine } from './audio/engine';
 import { renderInWorker } from './audio/render';
 import { toPcm16 } from './dsp/wav';
 import { audioUrl } from './sources';
-import { getState, setState, syncPrints, useStore } from './state/store';
+import { getState, setState, syncLoudness, syncPrints, useStore } from './state/store';
 
 // Parity hooks (kept in production builds — harmless): SHA-256 of the PCM16 bytes of the current
 // render / decoded source, compared by ~/pw-test/narrator_studio_parity.mjs with `npm run render`.
@@ -63,6 +63,7 @@ export default function App() {
         engine.switchBuffer(url);
         setState({ progress: null, loadedUrl: url });
         syncPrints();
+        syncLoudness();
       })
       .catch((e) => { if (live) setState({ progress: null, error: `לא הצלחתי לטעון את הקובץ (${String(e?.message ?? e)})` }); });
     return () => { live = false; };

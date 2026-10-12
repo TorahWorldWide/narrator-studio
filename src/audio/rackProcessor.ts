@@ -10,7 +10,8 @@ type Msg =
   | { type: 'chain'; chain: ChainItem[]; prints?: (Float32Array | null)[] }
   | { type: 'params'; index: number; p: Record<string, unknown> }
   | { type: 'bypass'; on: boolean }
-  | { type: 'print'; index: number; data: Float32Array };
+  | { type: 'print'; index: number; data: Float32Array }
+  | { type: 'measured'; index: number; lufs: number };
 
 interface PrintTarget { setPrint(d: Float32Array): void }
 const canPrint = (p: unknown): p is PrintTarget => typeof (p as PrintTarget | null)?.setPrint === 'function';
@@ -31,6 +32,7 @@ class RackProcessor extends AudioWorkletProcessor {
       } else if (m.type === 'params') this.rack.setParams(m.index, m.p);
       else if (m.type === 'bypass') this.rack.bypass = m.on;
       else if (m.type === 'print') { const p = this.rack.processor(m.index); if (canPrint(p)) p.setPrint(m.data); }
+      else if (m.type === 'measured') { const p = this.rack.processor(m.index) as { setMeasured?: (l: number) => void } | null; p?.setMeasured?.(m.lufs); }
     };
   }
   process(inputs: Float32Array[][], outputs: Float32Array[][]) {

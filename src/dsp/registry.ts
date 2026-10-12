@@ -28,11 +28,12 @@ import { clipper } from './modules/clipper';
 import { transient } from './modules/transient';
 import { mbcomp } from './modules/mbcomp';
 import { rider } from './modules/rider';
+import { loudness } from './modules/loudness';
 import { GROUPS } from './groups';
 
 const ALL: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, pitch, reverb, delay,
   chorus, phaser, lofi, tremolo, robot, geq, dyneq, tilt, exciter,
-  expander, clipper, transient, mbcomp, rider];
+  expander, clipper, transient, mbcomp, rider, loudness];
 export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(ALL.map((m) => [m.id, m]));
 /** Ordered list for the "+" sheet: group order, then the order inside each group. */
 export const MODULES: ModuleDef[] = GROUPS.flatMap((g) => g.modules.map((id) => REGISTRY[id]).filter(Boolean));

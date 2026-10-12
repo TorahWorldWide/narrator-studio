@@ -160,6 +160,7 @@ class Engine {
     this.chain = chain; if (prints) this.prints = prints; this.sendChain();
   }
   setParams(index: number, p: Record<string, unknown>) { this.node?.port.postMessage({ type: 'params', index, p }); }
+  setMeasured(index: number, lufs: number) { this.node?.port.postMessage({ type: 'measured', index, lufs }); }
   setPrint(index: number, data: Float32Array) { this.prints[index] = data; this.node?.port.postMessage({ type: 'print', index, data }); }
 
   /** Swaps the playing buffer at the same position; keeps play state. The url must be loaded. */

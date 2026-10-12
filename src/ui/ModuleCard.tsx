@@ -43,6 +43,15 @@ function NrControls({ item, index }: { item: ChainItem; index: number }) {
   );
 }
 
+function LoudnessInfo({ item, index }: { item: ChainItem; index: number }) {
+  const m = useStore((s) => s.measures[index]);
+  if (!item.on) return null;
+  if (m === undefined || m === 'busy') return <p className="card-info">מודד את העוצמה של הפרק…</p>;
+  const target = typeof item.p.target === 'number' ? item.p.target : -19;
+  const g = Math.max(-24, Math.min(24, target - m));
+  return <p className="card-info">נמדד {m.toFixed(1)} LUFS ← {g >= 0 ? '+' : ''}{g.toFixed(1)} dB</p>;
+}
+
 export default function ModuleCard({ item, index, count }: { item: ChainItem; index: number; count: number }) {
   const def = REGISTRY[item.id];
   if (!def) return null;
@@ -66,6 +75,7 @@ export default function ModuleCard({ item, index, count }: { item: ChainItem; in
       {item.id === 'nr' && <NrControls item={item} index={index} />}
       {item.id === 'hum' && <p className="card-note">{HUM_WARNING}</p>}
       {item.id === 'pitch' && <p className="card-note">{PITCH_WARNING}</p>}
+      {item.id === 'loudness' && <LoudnessInfo item={item} index={index} />}
       <div className="knobs">
         {def.params.map((pd) => (
           <Knob key={pd.key} def={pd} value={typeof item.p[pd.key] === 'number' ? item.p[pd.key] : pd.def}

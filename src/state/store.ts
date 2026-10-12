@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { engine } from '../audio/engine';
+import { measureInWorker } from '../audio/render';
 import { isRegion, printKey, printStats, type PrintMode } from '../dsp/modules/nr';
 import { REGISTRY } from '../dsp/registry';
 import type { ChainItem } from '../dsp/types';
@@ -21,6 +22,8 @@ export interface State {
   loadedUrl: string;
   sheet: Sheet;
   analyzer: boolean;
+  /** loudness modules: measured input LUFS per chain index ('busy' while measuring) */
+  measures: Record<number, number | 'busy'>;
   toast: { msg: string; id: number } | null;
 }
 
@@ -29,7 +32,7 @@ const PERSIST = ['chain', 'source', 'book', 'chapter', 'presets'] as const;
 
 const DEFAULTS: State = {
   source: 'live', book: 'Genesis', chapter: 1, chain: [], presets: [], note: '', bypass: false,
-  loop: null, zoom: 1, progress: null, error: null, loadedUrl: '', sheet: null, analyzer: false, toast: null,
+  loop: null, zoom: 1, progress: null, error: null, loadedUrl: '', sheet: null, analyzer: false, measures: {}, toast: null,
 };
 
 function readPersisted(): Partial<State> & { _fresh?: boolean } {
@@ -95,7 +98,41 @@ export function useStore<T>(sel: (s: State) => T): T {
 let toastId = 0;
 export function toast(msg: string) { setState({ toast: { msg, id: ++toastId } }); }
 
-function setChain(chain: ChainItem[]) { setState({ chain }); engine.setChain(chain, []); syncPrints(); }
+function setChain(chain: ChainItem[]) { setState({ chain }); engine.setChain(chain, []); syncPrints(); syncLoudness(); }
+
+// ---- loudness modules: measure what reaches them (prefix render in a worker), debounced + cached ----
+const measureCache = new Map<string, number>();
+let measureTimer: ReturnType<typeof setTimeout> | undefined;
+export function syncLoudness() {
+  clearTimeout(measureTimer);
+  const idx = state.chain.map((c, i) => (c.id === 'loudness' && c.on ? i : -1)).filter((i) => i >= 0);
+  if (!idx.length) { if (Object.keys(state.measures).length) setState({ measures: {} }); return; }
+  const url = state.loadedUrl;
+  const keyOf = (i: number) => `${url}|${JSON.stringify(state.chain.slice(0, i).filter((c) => c.on))}`;
+  const measures: Record<number, number | 'busy'> = {};
+  for (const i of idx) {
+    const hit = measureCache.get(keyOf(i));
+    measures[i] = hit ?? 'busy';
+    if (hit !== undefined) engine.setMeasured(i, hit);
+  }
+  setState({ measures });
+  if (!idx.some((i) => measures[i] === 'busy')) return;
+  measureTimer = setTimeout(async () => {
+    const data = url ? engine.data(url) : null;
+    if (!data) return;
+    const chain = state.chain;
+    for (const i of idx) {
+      const key = keyOf(i);
+      if (measureCache.has(key)) continue;
+      try {
+        const lufs = await measureInWorker(data, chain, i);
+        measureCache.set(key, lufs);
+        if (measureCache.size > 30) measureCache.delete(measureCache.keys().next().value as string);
+      } catch { /* leave busy; next change retries */ }
+    }
+    if (state.chain === chain && state.loadedUrl === url) syncLoudness();
+  }, 1200);
+}
 
 // ---- noise prints for nr modules (the worklet has no source, so the main thread computes them) ----
 const printCache = new Map<string, Float32Array>();
@@ -150,6 +187,7 @@ export function setParam(i: number, key: string, value: unknown) {
   chain[i] = { ...it, p };
   setState({ chain });
   engine.setParams(i, p);
+  if (state.chain.some((c, k) => c.id === 'loudness' && c.on && k > i)) syncLoudness();
 }
 export function setBypass(on: boolean) { setState({ bypass: on }); engine.setBypass(on); }
 

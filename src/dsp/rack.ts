@@ -1,3 +1,5 @@
+import { integratedLufs } from './lufs';
+import { canMeasure } from './modules/loudness';
 import { REGISTRY } from './registry';
 import { hasGr, type ChainItem, type ModuleContext, type ModuleDef, type Processor } from './types';
 
@@ -55,6 +57,13 @@ export class Rack {
   reset() { this.slots.forEach((s) => s.proc?.reset()); }
 }
 
+/** Integrated LUFS of the signal entering chain[index] (the enabled modules before it, rendered offline). */
+export function measureInput(source: Float32Array, chain: ChainItem[], index: number, sr = 48000, block = BLOCK): number {
+  const prefix = chain.slice(0, index);
+  const active = prefix.some((c) => c.on && REGISTRY[c.id]);
+  return integratedLufs(active ? renderOffline(source, prefix, sr, block) : source, sr);
+}
+
 /**
  * Render `source` through `chain` exactly like the worklet does (blocks of `block` samples, the first
  * module reads a separate input buffer), followed by latency() zeros; the output is shifted back by
@@ -67,6 +76,10 @@ export function renderOffline(
   const rack = new Rack(sr);
   rack.setContext({ source });
   rack.setChain(chain);
+  chain.forEach((it, i) => {                       // loudness modules: measure what reaches them
+    const proc = rack.processor(i);
+    if (it.on && canMeasure(proc)) proc.setMeasured(measureInput(source, chain, i, sr, block));
+  });
   const L = rack.latency();
   const total = source.length + L;
   const nBlocks = Math.ceil(total / block);
