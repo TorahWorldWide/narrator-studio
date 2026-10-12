@@ -90,3 +90,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - From the MP3: hashes differ because the decoders differ (Chrome vs ffmpeg 4.4), same length 17472598; decoder difference max |d| = 1.8e-6 (−115 dBFS), RMS −143 dB.
 - DSP parity: both fed the ffmpeg-decoded float32 WAV (Playwright route, nothing written to docs/) → source hashes identical AND render hashes identical (57b91a9b…), = the Node MP3 render. Browser render of 6:04 with this chain: 7.1 s headless.
 - Next: 3.6 batch.
+
+## 3.6 batch — done
+- tools/batch.ts: child-process pool (default 2), shipped file = MP3 when --mp3 (QA runs on it; WAV deleted unless --keep-wav, since 929 WAVs ≈ 30 GB), report.jsonl + SUMMARY.md + recipe.json copy.
+- Test: Ruth 1–4 from ~/hum/live with hp+nr+comp+limiter --mp3 → 4/4 ok, len identical after MP3 round-trip, lag 0, 7.4 s/file at 2 jobs (≈ 1 h for 929 on the VM). LUFS median −16.8 → −23.5 (NR+comp lower loudness; live files measure −16.9 LUFS with ffmpeg ebur128/loudnorm).
