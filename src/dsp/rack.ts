@@ -58,10 +58,11 @@ export class Rack {
 }
 
 /** Integrated LUFS of the signal entering chain[index] (the enabled modules before it, rendered offline). */
-export function measureInput(source: Float32Array, chain: ChainItem[], index: number, sr = 48000, block = BLOCK): number {
+export function measureInput(source: Float32Array, chain: ChainItem[], index: number, sr = 48000, block = BLOCK,
+  onProgress?: (frac: number) => void): number {
   const prefix = chain.slice(0, index);
   const active = prefix.some((c) => c.on && REGISTRY[c.id]);
-  return integratedLufs(active ? renderOffline(source, prefix, sr, block) : source, sr);
+  return integratedLufs(active ? renderOffline(source, prefix, sr, block, onProgress) : source, sr);
 }
 
 /**
@@ -76,10 +77,14 @@ export function renderOffline(
   const rack = new Rack(sr);
   rack.setContext({ source });
   rack.setChain(chain);
-  chain.forEach((it, i) => {                       // loudness modules: measure what reaches them
-    const proc = rack.processor(i);
-    if (it.on && canMeasure(proc)) proc.setMeasured(measureInput(source, chain, i, sr, block));
+  // loudness modules: measure what reaches them first (progress: the measuring passes share the first half)
+  const meas = chain.map((it, i) => (it.on && canMeasure(rack.processor(i)) ? i : -1)).filter((i) => i >= 0);
+  const span = meas.length ? 0.5 / meas.length : 0;
+  meas.forEach((i, k) => {
+    const proc = rack.processor(i) as unknown as { setMeasured(l: number): void };
+    proc.setMeasured(measureInput(source, chain, i, sr, block, onProgress && ((f) => onProgress(k * span + f * span))));
   });
+  const base = meas.length ? 0.5 : 0;
   const L = rack.latency();
   const total = source.length + L;
   const nBlocks = Math.ceil(total / block);
@@ -91,7 +96,7 @@ export function renderOffline(
     xb.fill(0);
     if (s < source.length) xb.set(source.subarray(s, Math.min(s + block, source.length)));
     rack.process(xb, out.subarray(s, s + block));
-    if (onProgress && (b + 1) / nBlocks >= nextTick) { onProgress((b + 1) / nBlocks); nextTick += 0.1; }
+    if (onProgress && (b + 1) / nBlocks >= nextTick) { onProgress(base + (1 - base) * ((b + 1) / nBlocks)); nextTick += 0.1; }
   }
   return out.slice(L, L + source.length);
 }
