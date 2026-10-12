@@ -76,6 +76,7 @@ export default function ModuleCard({ item, index, count }: { item: ChainItem; in
       {item.id === 'hum' && <p className="card-note">{HUM_WARNING}</p>}
       {item.id === 'pitch' && <p className="card-note">{PITCH_WARNING}</p>}
       {item.id === 'loudness' && <LoudnessInfo item={item} index={index} />}
+      {item.id === 'debreath' && <p className="card-note">תקשיב שלא נבלעים ה׳ ו-ח׳ — אם כן, הגדל את "אורך מינימום"</p>}
       <div className="knobs">
         {def.params.map((pd) => (
           <Knob key={pd.key} def={pd} value={typeof item.p[pd.key] === 'number' ? item.p[pd.key] : pd.def}
