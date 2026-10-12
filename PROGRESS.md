@@ -18,3 +18,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - `~/pw-test/narrator_studio_smoke.mjs [url]` (default http://127.0.0.1:4173/narrator-studio/); screenshot /tmp/narrator_studio.png.
 - Preview: `{"title":true,"dir":"rtl","errs":[],"bad":[]}`; live URL same result.
 - Next: Phase 1, task 1.1 (sources + structure).
+
+## 1.1 sources + structure — done
+- src/sources.ts (SOURCES, audioUrl, hasSource, BOOKS/SECTIONS flattened from torahStructure.json; resolveJsonModule on). tests/sources.test.ts green (39 books, 929 ch).
+- Next: 1.2 upload originals to R2 (background), then 1.3 DSP core.
