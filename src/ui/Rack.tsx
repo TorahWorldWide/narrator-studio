@@ -1,5 +1,6 @@
 import { setState, useStore } from '../state/store';
 import ModuleCard from './ModuleCard';
+import Presets from './Presets';
 
 export default function Rack() {
   const chain = useStore((s) => s.chain);
@@ -8,6 +9,7 @@ export default function Rack() {
       {chain.length === 0 && <p className="muted empty">אין אפקטים עדיין — הוסף אחד או טען פריסט.</p>}
       {chain.map((it, i) => <ModuleCard key={`${i}-${it.id}`} item={it} index={i} count={chain.length} />)}
       <button type="button" className="btn add-btn" onClick={() => setState({ sheet: 'add' })}>+ הוסף אפקט</button>
+      <Presets />
     </div>
   );
 }

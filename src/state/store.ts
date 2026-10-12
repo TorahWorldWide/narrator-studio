@@ -46,10 +46,25 @@ function readPersisted(): Partial<State> & { _fresh?: boolean } {
   } catch { return { _fresh: true }; }
 }
 
+/** Created on first run (the nr one resolves once Phase 2 adds the module). */
+export const STARTER_PRESETS: Preset[] = [
+  { name: 'ריק', chain: [] },
+  { name: 'מסנן 95', chain: [{ id: 'hp', on: true, p: { freq: 95, order: 4 } }] },
+  { name: 'שקט בהפסקות (א׳)', chain: [
+    { id: 'hp', on: true, p: { freq: 95, order: 4 } },
+    { id: 'gate', on: true, p: { thresh: -45, range: 12, attack: 2, hold: 80, release: 150 } },
+  ] },
+  { name: 'הפחתת רעש (ב׳ בקירוב)', chain: [
+    { id: 'hp', on: true, p: { freq: 95, order: 4 } },
+    { id: 'nr', on: true, p: { depth: 10, k: 1.5 } },
+  ] },
+];
+
 const persisted = typeof localStorage === 'undefined' ? { _fresh: true } : readPersisted();
 export const firstRun = !!persisted._fresh;
 delete persisted._fresh;
 let state: State = { ...DEFAULTS, ...persisted };
+if (firstRun) state = { ...state, presets: STARTER_PRESETS };
 const subs = new Set<() => void>();
 
 function persist(prev: State) {
@@ -142,5 +157,6 @@ export function setLoop(loop: [number, number] | null) {
   if (loop) engine.setLoop(loop[0], loop[1]); else engine.setLoop();
 }
 
-// keep the engine's chain in step with the restored state
+// keep the engine's chain in step with the restored state; save the starters on first run
 engine.setChain(state.chain);
+if (firstRun) persist({ ...state, presets: [] });

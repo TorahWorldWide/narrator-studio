@@ -49,3 +49,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - Choices: A/B button turns gold when effects are BYPASSED (the state you must notice). Waveform is LTR inside the RTL page; at zoom>1 a strip under it scrolls (canvas itself is touch-action:none for loops). iOS: navigator.audioSession.type=playback so the silent switch does not mute.
 - Local smoke (preview): pass=true, Genesis 1 live loads in 0.6 s.
 - Next: 1.7 presets.
+
+## 1.7 presets — done
+- src/ui/Presets.tsx under the rack; 4 starters saved on first run (store STARTER_PRESETS). nr preset loads hp only + toast until Phase 2.
+- Smoke now also checks presets (gate preset → 2 cards; nr preset → toast).
