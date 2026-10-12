@@ -125,7 +125,8 @@ class Engine {
   async play(fromSec?: number) {
     await this.init();
     if (!this.cache.get(this.url)) return;
-    const at = fromSec ?? (this.offset >= this.duration - 0.01 ? 0 : this.offset);
+    let at = fromSec ?? (this.offset >= this.duration - 0.01 ? 0 : this.offset);
+    if (fromSec === undefined && this.loop && (at < this.loop[0] || at >= this.loop[1])) at = this.loop[0];
     this.startSource(at);
   }
   pause() {
