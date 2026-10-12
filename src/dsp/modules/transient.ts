@@ -9,11 +9,10 @@ const DEF: TransP = { attack: 0, sustain: 0 };
  * (attack), where slow > fast it is ringing out (sustain); each part gets its own boost/cut in dB.
  */
 class TransProc implements Processor<TransP> {
-  private sr: number; private fast = 0; private slow = 0; private g = 0;
+  private fast = 0; private slow = 0; private g = 0;
   private fa: number; private fr: number; private sa: number; private sr2: number; private gs: number;
   private att = 0; private sus = 0;
   constructor(sr: number) {
-    this.sr = sr;
     const c = (ms: number) => Math.exp(-1 / ((ms / 1000) * sr));
     this.fa = c(1); this.fr = c(20); this.sa = c(30); this.sr2 = c(200); this.gs = c(1);
   }
