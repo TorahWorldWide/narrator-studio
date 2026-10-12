@@ -34,12 +34,13 @@ import { deplosive } from './modules/deplosive';
 import { debreath } from './modules/debreath';
 import { ainr } from './modules/ainr';
 import { dereverb } from './modules/dereverb';
+import { room } from './modules/room';
 import { GROUPS } from './groups';
 
 const ALL: ModuleDef[] = [gain, hp, lp, eq, gate, comp, limiter, nr, hum, deess, sat, pitch, reverb, delay,
   chorus, phaser, lofi, tremolo, robot, geq, dyneq, tilt, exciter,
   expander, clipper, transient, mbcomp, rider, loudness,
-  declick, deplosive, debreath, ainr, dereverb];
+  declick, deplosive, debreath, ainr, dereverb, room];
 export const REGISTRY: Record<string, ModuleDef> = Object.fromEntries(ALL.map((m) => [m.id, m]));
 /** Ordered list for the "+" sheet: group order, then the order inside each group. */
 export const MODULES: ModuleDef[] = GROUPS.flatMap((g) => g.modules.map((id) => REGISTRY[id]).filter(Boolean));
