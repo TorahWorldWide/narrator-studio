@@ -22,3 +22,6 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 ## 1.1 sources + structure — done
 - src/sources.ts (SOURCES, audioUrl, hasSource, BOOKS/SECTIONS flattened from torahStructure.json; resolveJsonModule on). tests/sources.test.ts green (39 books, 929 ch).
 - Next: 1.2 upload originals to R2 (background), then 1.3 DSP core.
+
+## 1.2 upload originals — script committed, upload running
+- tools/upload_orig.py (resumable, 8 threads) started ~10:04 UTC in background, log /tmp/upload_orig.log. Verify count==929 + curl ACAO before 1.6.
