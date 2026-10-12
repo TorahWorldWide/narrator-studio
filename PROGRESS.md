@@ -110,3 +110,6 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - [x] Nothing changed in ~/TorahWorldwide-v2, ~/torah-narrator-b, or R2 narration/ (only ADDED narration-orig/).
 
 ## STATUS: Phases 0–3 complete. Phase 4 waits for Tomer's feedback (do not start on your own).
+
+## Phase 4 — Tomer feedback 1 (12.10, ~11:20 UTC)
+- He wants at least 2× the effects (FL-plugin style, audio-editing only, no MIDI). Asked first: where they come from + a list with one line each; he approves/rejects by number. Proposal of 20 (own TS code per public algorithms; RNNoise WASM; OpenAIR IRs; nothing that changes length/timing) sent — AWAITING his numbers. Do not build before approval.
