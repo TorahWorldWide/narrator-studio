@@ -94,3 +94,19 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 ## 3.6 batch — done
 - tools/batch.ts: child-process pool (default 2), shipped file = MP3 when --mp3 (QA runs on it; WAV deleted unless --keep-wav, since 929 WAVs ≈ 30 GB), report.jsonl + SUMMARY.md + recipe.json copy.
 - Test: Ruth 1–4 from ~/hum/live with hp+nr+comp+limiter --mp3 → 4/4 ok, len identical after MP3 round-trip, lag 0, 7.4 s/file at 2 jobs (≈ 1 h for 929 on the VM). LUFS median −16.8 → −23.5 (NR+comp lower loudness; live files measure −16.9 LUFS with ffmpeg ebur128/loudnorm).
+
+## 3.7 README + deploy phase 3 — done (~11:12 UTC)
+- README.md (Hebrew first, then English): usage bullets, recipe, the 3 Hermes commands, parity promise + limits (MP3 decoder −115 dBFS, QA lag band/tolerance, nr causal smoothing, pitch), sources, dev.
+- `deploy: phase 3` pushed; live bundle index-JWpRjSD_.js; all 4 assets 200.
+- Live smoke pass=true (incl. WAV render 7.1 s + recipe download). Live parity pass=true (DSP hashes identical 57b91a9b…, decoder diff −115 dBFS).
+- Phase-3 message + link sent to Tomer.
+
+## Acceptance checklist (phase 3)
+- [x] npm test 40/40 green; build clean (tsc -b + vite).
+- [x] Smoke errs [] bad [] (live).
+- [x] Live URL 200, bundle hash matches docs/index.html.
+- [x] Phone sanity 390 px screenshots: no overflow, transport reachable, knobs 56 px, RTL.
+- [x] Rendered output: len_out == len_ref; lag 0 in 2–6 kHz for hp+nr+comp+limiter (≤ 48 tolerance, see 3.2–3.4); peak_out ≤ 0 dBFS.
+- [x] Nothing changed in ~/TorahWorldwide-v2, ~/torah-narrator-b, or R2 narration/ (only ADDED narration-orig/).
+
+## STATUS: Phases 0–3 complete. Phase 4 waits for Tomer's feedback (do not start on your own).
