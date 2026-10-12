@@ -24,7 +24,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
 - Next: 1.2 upload originals to R2 (background), then 1.3 DSP core.
 
 ## 1.2 upload originals — script committed, upload running
-- tools/upload_orig.py (resumable, 8 threads) started ~10:04 UTC in background, log /tmp/upload_orig.log. Verify count==929 + curl ACAO before 1.6.
+- Upload DONE 10:09 UTC: prefix_count=929; curl narration-orig/I%20Chronicles_1.mp3 → 200, audio/mpeg, ACAO *.
 
 ## 1.3 DSP core — done
 - src/dsp/{types,util,biquad,rack,registry}.ts + modules gain/hp/lp/eq/gate/comp/limiter; tests in tests/dsp + tests/rack.test.ts (24 green).
@@ -34,3 +34,7 @@ Plan: ~/.hermes/plans/2026-10-12-narrator-studio.md (Fable 5.1). Executor: Opus 
   branching detector settled 0.66 dB short of the static curve on a steady tone.
   Processors that report gain reduction expose a numeric `gr` (comp/gate/limiter); Rack.grs() reads it.
 - Next: 1.4 recipe.
+
+## 1.4 recipe — done
+- src/recipe.ts: Recipe type, validate() (v, sr, source, book, chapter range, unknown id, on/p shape), toRecipe()/serialize() in contract key order. tests/recipe.test.ts green.
+- Next: 1.5 audio engine + worklet.
